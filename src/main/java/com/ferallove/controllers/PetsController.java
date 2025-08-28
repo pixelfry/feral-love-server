@@ -24,4 +24,15 @@ public class PetsController {
     public ResponseEntity<ArrayList<Pets>> findPetsByAvailabilityStatus(@RequestParam("available") String availability) {
         return ResponseEntity.ok().body(petsService.findPetsByAvailabilityStatus(availability));
     }
+
+    @GetMapping("/names/{name}")
+    public ResponseEntity<ArrayList<Pets>> findPetsByName(@RequestParam("name") String name) {
+        return ResponseEntity.ok().body(petsService.findPetsByName(name));
+    }
+
+    @GetMapping("/id/{petid}")
+    public ResponseEntity<Pets> findPetsByPetId(@RequestParam("petid") int petId) {
+        return ResponseEntity.ok().body(petsService.findPetsByPetId(petId));
+    }
+
 }

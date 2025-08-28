@@ -5,6 +5,7 @@ import com.ferallove.repos.PetsRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class PetsServiceImpl implements PetsService {
@@ -22,7 +23,9 @@ public class PetsServiceImpl implements PetsService {
 
     @Override
     public ArrayList<Pets> findPetsByName(String name) {
-        return petsRepo.findPetsByName(name);
+        return petsRepo.findPetsByName(name).stream()
+                .filter(p -> p.getName().equals(name))
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
