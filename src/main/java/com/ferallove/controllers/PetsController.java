@@ -3,13 +3,11 @@ package com.ferallove.controllers;
 import com.ferallove.models.Pets;
 import com.ferallove.services.PetsServiceImpl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
+@CrossOrigin( origins = "${DEV.SERVER}")
 @RestController
 @RequestMapping("/api/pets")
 public class PetsController {
@@ -33,6 +31,11 @@ public class PetsController {
     @GetMapping("/id/{petid}")
     public ResponseEntity<Pets> findPetsByPetId(@RequestParam("petid") int petId) {
         return ResponseEntity.ok().body(petsService.findPetsByPetId(petId));
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<ArrayList<Pets>> findAll() {
+        return ResponseEntity.ok().body(petsService.findAll());
     }
 
 }

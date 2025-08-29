@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -16,4 +17,6 @@ public interface PetsRepo extends JpaRepository<Pets, Integer> {
     ArrayList<Pets> findPetsByBreed(String breed);
     ArrayList<Pets> findPetsByAge(int age);
     ArrayList<Pets> findPetsByAvailabilityStatus(String availabilityStatus);
+    @Override
+    List<Pets> findAll();
 }

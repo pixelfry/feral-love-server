@@ -12,4 +12,5 @@ public interface PetsService {
     ArrayList<Pets> findPetsByBreed(String breed);
     ArrayList<Pets> findPetsByAge(int age);
     ArrayList<Pets> findPetsByAvailabilityStatus(String availabilityStatus);
+    ArrayList<Pets> findAll();
 }
