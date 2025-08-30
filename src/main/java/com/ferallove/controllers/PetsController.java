@@ -18,8 +18,13 @@ public class PetsController {
         this.petsService = petsService;
     }
 
-    @GetMapping("/availability/{available}")
-    public ResponseEntity<ArrayList<Pets>> findPetsByAvailabilityStatus(@RequestParam("available") String availability) {
+    @GetMapping("/")
+    public ResponseEntity<ArrayList<Pets>> findAll() {
+        return ResponseEntity.ok().body(petsService.findAll());
+    }
+
+    @GetMapping("/availability")
+    public ResponseEntity<ArrayList<Pets>> findPetsByAvailabilityStatus(@RequestParam(name = "available") String availability) {
         return ResponseEntity.ok().body(petsService.findPetsByAvailabilityStatus(availability));
     }
 
@@ -33,9 +38,5 @@ public class PetsController {
         return ResponseEntity.ok().body(petsService.findPetsByPetId(petId));
     }
 
-    @GetMapping("/")
-    public ResponseEntity<ArrayList<Pets>> findAll() {
-        return ResponseEntity.ok().body(petsService.findAll());
-    }
 
 }

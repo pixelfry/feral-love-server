@@ -23,11 +23,12 @@ CREATE TABLE dev.success_stories (
     pet_id int4 NOT NULL, -- Foreign key to link with pets table
     "name" varchar(100) NOT NULL, -- Name of the adopted animal
     adopter_name varchar(100) NOT NULL, -- Name of the person who adopted
-    adoption_date date NOT NULL, -- Date when the pet was adopted
+    adoption_date timestamptz, -- Date when the pet was adopted
     story text NOT NULL, -- Success story or details about the adoption
     CONSTRAINT success_stories_pkey PRIMARY KEY (story_id),
     CONSTRAINT fk_pet FOREIGN KEY (pet_id) REFERENCES dev.pets(pet_id)
 );
+
 
 CREATE TABLE dev.adopters (
     adopter_id serial4 NOT NULL,
@@ -57,7 +58,6 @@ CREATE TABLE dev.adoption (
     CONSTRAINT fk_adopter FOREIGN KEY (adopter_id) REFERENCES dev.adopters(adopter_id)
 );
 
-
 INSERT INTO dev.pets ("name",species,breed,age,gender,description,availability_status) VALUES
 	 ('Leeroy','cat','tabby',4,'M','Descritpion text','available'),
 	 ('Lucky','cat','main coon',7,'M','Descritpion text','available'),
@@ -72,3 +72,19 @@ INSERT INTO dev.pets ("name",species,breed,age,gender,description,availability_s
 	 ('Nala','cat','ragdoll',3,'F','Descritpion text','available'),
 	 ('Nala','cat','ragdoll',3,'F','Descritpion text','available'),
 	 ('Nala','cat','ragdoll',3,'F','Descritpion text','pending');
+
+INSERT INTO dev.success_stories (pet_id, "name", adopter_name, adoption_date, story) VALUES
+(3, 'Maleficient', 'David Miller', CURRENT_DATE - INTERVAL '6 months', 'A tale of transformation: How Nala the cat blossomed into a happy and playful companion after finding her forever home.'),
+(5, 'Athena', 'Sophia Lee', CURRENT_DATE - INTERVAL '7 months', 'The story of how Nala, once considered aloof, won over hearts by proving that cats can indeed be affectionate with the right 
+care.'),
+(8, 'Kuro', 'William Martinez', CURRENT_DATE - INTERVAL '10 months', 'The adoption of Nala as a pet was not just a rescue but a beautiful story of love and mutual understanding between a cat and 
+her new family.'),
+(9, 'Lucy', 'Isabella Rodriguez', CURRENT_DATE - INTERVAL '11 months', 'An uplifting tale where Nala''s journey from being somewhat reserved to becoming an affectionate companion is told with the 
+hope that all cats can adapt beautifully under suitable circumstances.');
+
+
+SELECT ss."name", ss.adoption_date, ss.story
+FROM dev.success_stories ss
+JOIN dev.pets p ON ss.pet_id = p.pet_id
+WHERE p.availability_status = 'adopted';
+
