@@ -1,90 +1,82 @@
 CREATE SCHEMA dev;
 
 DROP TABLE IF EXISTS dev.pets;
+DROP TABLE IF EXISTS dev.animal;
 DROP TABLE IF EXISTS dev.success_stories;
 DROP TABLE IF EXISTS dev.adopters;
 DROP TABLE IF EXISTS dev.adoption_events;
 DROP TABLE IF EXISTS dev.adoption;
 
-CREATE TABLE dev.pets (
-	pet_id serial4 NOT NULL,
-	"name" varchar(50) NOT NULL,
-	species varchar(50) NOT NULL,
-	breed varchar(100) NULL,
-	age int4 NULL,
-	gender bpchar(1) NULL,
+DROP TABLE IF EXISTS dev.animal;
+DROP TABLE IF EXISTS dev.location ;
+DROP TABLE IF EXISTS dev.species;
+DROP TYPE IF EXISTS dev.animal_availability CASCADE;
+
+CREATE TABLE dev.species (
+	species_id serial4 NOT NULL,
+	species_name varchar(30) NULL,
+	species_attributes JSONB NULL,
+	CONSTRAINT species_id PRIMARY KEY (species_id)
+);
+
+CREATE TABLE dev.location (
+	location_id serial4 NOT NULL,
+	location_name varchar(50) NOT NULL,
+	location_state varchar(35) NOT NULL,
+	CONSTRAINT location_pkey PRIMARY KEY (location_id)	
+);
+
+CREATE TABLE dev.animal (
+	animal_id serial4 NOT NULL,
+	animal_name varchar(50) NOT NULL,
+	species_id int NOT NULL,
+	location_id int NOT NULL,
+	age int4 NULL, -- age in months
+	gender bpchar(1) NOT NULL,
 	description text NULL,
-	availability_status varchar(20) DEFAULT 'available'::character varying NULL,
-	CONSTRAINT pets_pkey PRIMARY KEY (pet_id)
+	availability_status varchar(10) DEFAULT 'available',
+	CONSTRAINT animal_pkey PRIMARY KEY (animal_id),
+	CONSTRAINT fk_location FOREIGN KEY (location_id) REFERENCES dev.location(location_id),
+	CONSTRAINT fk_species FOREIGN KEY (species_id) REFERENCES dev.species(species_id)
 );
 
 CREATE TABLE dev.success_stories (
     story_id serial4 NOT NULL,
-    pet_id int4 NOT NULL, -- Foreign key to link with pets table
-    "name" varchar(100) NOT NULL, -- Name of the adopted animal
-    adopter_name varchar(100) NOT NULL, -- Name of the person who adopted
-    adoption_date timestamptz, -- Date when the pet was adopted
-    story text NOT NULL, -- Success story or details about the adoption
+    animal_id int4 NOT NULL, 
+    adoption_date timestamptz, 
+    story text NOT NULL,
     CONSTRAINT success_stories_pkey PRIMARY KEY (story_id),
-    CONSTRAINT fk_pet FOREIGN KEY (pet_id) REFERENCES dev.pets(pet_id)
+    CONSTRAINT fk_animal FOREIGN KEY (animal_id) REFERENCES dev.animal(animal_id)
 );
 
 
-CREATE TABLE dev.adopters (
-    adopter_id serial4 NOT NULL,
-    name varchar(100) NOT NULL, -- Name of the adopter
-    email varchar(150), -- Email for communication
-    phone varchar(20), -- Phone number for contact
-    address text, -- Physical address
-    CONSTRAINT adopters_pkey PRIMARY KEY (adopter_id)
-);
 
-CREATE TABLE dev.adoption_events (
-    event_id serial4 NOT NULL,
-    pet_id int4 NOT NULL, -- The animal involved in the adoption event
-    event_date timestamp NOT NULL, -- Date and time of the event
-    location text, -- Physical location or online link for the event
-    CONSTRAINT adoption_events_pkey PRIMARY KEY (event_id),
-    CONSTRAINT fk_pet FOREIGN KEY (pet_id) REFERENCES dev.pets(pet_id)
-);
+--CREATE TABLE dev.adopters (
+--    adopter_id serial4 NOT NULL,
+--    name varchar(100) NOT NULL, -- Name of the adopter
+--    email varchar(150), -- Email for communication
+--    phone varchar(20), -- Phone number for contact
+--    address text, -- Physical address
+--    CONSTRAINT adopters_pkey PRIMARY KEY (adopter_id)
+--);
+--
+--CREATE TABLE dev.adoption_events (
+--    event_id serial4 NOT NULL,
+--    animal_id int4 NOT NULL, -- The animal involved in the adoption event
+--    event_date timestamp NOT NULL, -- Date and time of the event
+--    location text, -- Physical location or online link for the event
+--    CONSTRAINT adoption_events_pkey PRIMARY KEY (event_id),
+--    CONSTRAINT fk_pet FOREIGN KEY (animal_id) REFERENCES dev.animal(animal_id)
+--);
+--
+--CREATE TABLE dev.adoption (
+--    adoption_id serial4 NOT NULL,
+--    animal_id int4 NOT NULL, -- Foreign key to link with animal table
+--    adopter_id int4 NOT NULL, -- Foreign key to link with adopters table
+--    adoption_date date NOT NULL, -- Date when the pet was adopted
+--    CONSTRAINT adoption_pkey PRIMARY KEY (adoption_id),
+--    CONSTRAINT fk_pet FOREIGN KEY (animal_id) REFERENCES dev.animal(animal_id),
+--    CONSTRAINT fk_adopter FOREIGN KEY (adopter_id) REFERENCES dev.adopters(adopter_id)
+--);
 
-CREATE TABLE dev.adoption (
-    adoption_id serial4 NOT NULL,
-    pet_id int4 NOT NULL, -- Foreign key to link with pets table
-    adopter_id int4 NOT NULL, -- Foreign key to link with adopters table
-    adoption_date date NOT NULL, -- Date when the pet was adopted
-    CONSTRAINT adoption_pkey PRIMARY KEY (adoption_id),
-    CONSTRAINT fk_pet FOREIGN KEY (pet_id) REFERENCES dev.pets(pet_id),
-    CONSTRAINT fk_adopter FOREIGN KEY (adopter_id) REFERENCES dev.adopters(adopter_id)
-);
-
-INSERT INTO dev.pets ("name",species,breed,age,gender,description,availability_status) VALUES
-	 ('Leeroy','cat','tabby',4,'M','Descritpion text','available'),
-	 ('Lucky','cat','main coon',7,'M','Descritpion text','available'),
-	 ('Maleficient','cat','persian',2,'F','Descritpion text','adopted'),
-	 ('Nala','cat','ragdoll',3,'F','Descritpion text','adopted'),
-	 ('Athena','cat','burmese',1,'F','Descritpion text','adopted'),
-	 ('Abby','cat','american shorthair',7,'F','Descritpion text','pending'),
-	 ('Kiyomi','cat','exotic shorthair',8,'F','Descritpion text','pending'),
-	 ('Kuro','cat','siamese',12,'F','Descritpion text','adopted'),
-	 ('Lucy','cat','tabby',10,'F','Descritpion text','adopted'),
-	 ('Mallard','cat','persian',6,'M','Descritpion text','available'),
-	 ('Nala','cat','ragdoll',3,'F','Descritpion text','available'),
-	 ('Nala','cat','ragdoll',3,'F','Descritpion text','available'),
-	 ('Nala','cat','ragdoll',3,'F','Descritpion text','pending');
-
-INSERT INTO dev.success_stories (pet_id, "name", adopter_name, adoption_date, story) VALUES
-(3, 'Maleficient', 'David Miller', CURRENT_DATE - INTERVAL '6 months', 'A tale of transformation: How Nala the cat blossomed into a happy and playful companion after finding her forever home.'),
-(5, 'Athena', 'Sophia Lee', CURRENT_DATE - INTERVAL '7 months', 'The story of how Nala, once considered aloof, won over hearts by proving that cats can indeed be affectionate with the right 
-care.'),
-(8, 'Kuro', 'William Martinez', CURRENT_DATE - INTERVAL '10 months', 'The adoption of Nala as a pet was not just a rescue but a beautiful story of love and mutual understanding between a cat and 
-her new family.'),
-(9, 'Lucy', 'Isabella Rodriguez', CURRENT_DATE - INTERVAL '11 months', 'An uplifting tale where Nala''s journey from being somewhat reserved to becoming an affectionate companion is told with the 
-hope that all cats can adapt beautifully under suitable circumstances.');
-
-
-SELECT ss."name", ss.adoption_date, ss.story
-FROM dev.success_stories ss
-JOIN dev.pets p ON ss.pet_id = p.pet_id
-WHERE p.availability_status = 'adopted';
 
