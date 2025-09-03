@@ -1,5 +1,6 @@
 package com.ferallove.repos;
 
+import com.ferallove.dto.AnimalDTO;
 import com.ferallove.enums.AnimalAvailability;
 import com.ferallove.models.Animal;
 import org.springframework.data.jpa.repository.JpaRepository;

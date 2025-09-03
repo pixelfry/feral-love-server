@@ -1,5 +1,6 @@
 package com.ferallove.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.ferallove.enums.AnimalAvailability;
 import com.ferallove.utils.AnimalAvailabilityConverter;
 import jakarta.persistence.*;
@@ -25,12 +26,21 @@ public class Animal implements Serializable {
     )
     private int animalId;
     private String animalName;
-    private int speciesId;
-    private int locationId;
+//    private int speciesId;
+//    private int locationId;
     @Nullable
     private Integer age;
     private char gender;
     private String description;
     @Convert(converter = AnimalAvailabilityConverter.class)
     private AnimalAvailability availabilityStatus;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
+    @JoinColumn(name = "speciesId", referencedColumnName = "speciesId")
+    private Species species;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "locationId", referencedColumnName = "locationId")
+    @JsonBackReference
+    private Location location;
+
 }

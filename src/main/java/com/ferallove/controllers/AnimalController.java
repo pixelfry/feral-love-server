@@ -20,25 +20,27 @@ public class AnimalController {
         this.animalService = animalService;
     }
 
-    @GetMapping("/")
-    public ResponseEntity<ArrayList<Animal>> findAll() {
-        return ResponseEntity.ok().body(animalService.findAll());
-    }
 
     @GetMapping("/availability")
     public ResponseEntity<ArrayList<AnimalDTO>> findAnimalByAvailabilityStatus(@RequestParam("available") String availability) {
         return ResponseEntity.ok().body(animalService.findAnimalByAvailabilityStatus(AnimalAvailability.fromValue(availability)));
     }
 
-    @GetMapping("/name")
-    public ResponseEntity<ArrayList<Animal>> findAnimalByName(@RequestParam("name") String name) {
-        return ResponseEntity.ok().body(animalService.findAnimalByAnimalName(name));
+    @GetMapping("/age")
+    public ResponseEntity<ArrayList<AnimalDTO>> findAnimalByAge(@RequestParam("age") int age) {
+        return ResponseEntity.ok().body(animalService.findAnimalByAge(age));
     }
 
     @GetMapping("/id")
-    public ResponseEntity<Animal> findAnimalByAnimalId(@RequestParam("animalId") int animalId) {
+    public ResponseEntity<AnimalDTO> findAnimalByAnimalId(@RequestParam("animalId") int animalId) {
         return ResponseEntity.ok().body(animalService.findAnimalByAnimalId(animalId));
     }
+
+    @GetMapping("/name")
+    public ResponseEntity<ArrayList<AnimalDTO>> findAnimalByName(@RequestParam("name") String name) {
+        return ResponseEntity.ok().body(animalService.findAnimalByAnimalName(name));
+    }
+
 
 
 }

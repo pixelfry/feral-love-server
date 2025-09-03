@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public interface AnimalService {
 
-    Animal findAnimalByAnimalId(int animalId);
-    ArrayList<Animal> findAnimalByAnimalName(String animalName);
-    ArrayList<Animal> findAnimalByAge(int age);
+    AnimalDTO findAnimalByAnimalId(int animalId);
+    ArrayList<AnimalDTO> findAnimalByAnimalName(String animalName);
+    ArrayList<AnimalDTO> findAnimalByAge(int age);
     ArrayList<AnimalDTO> findAnimalByAvailabilityStatus(AnimalAvailability availabilityStatus);
-    ArrayList<Animal> findAll();
+
 }
