@@ -1,5 +1,6 @@
 package com.ferallove.controllers;
 
+import com.ferallove.dto.AnimalDTO;
 import com.ferallove.enums.AnimalAvailability;
 import com.ferallove.models.Animal;
 import com.ferallove.services.AnimalServiceImpl;
@@ -25,7 +26,7 @@ public class AnimalController {
     }
 
     @GetMapping("/availability")
-    public ResponseEntity<ArrayList<Animal>> findAnimalByAvailabilityStatus(@RequestParam("available") String availability) {
+    public ResponseEntity<ArrayList<AnimalDTO>> findAnimalByAvailabilityStatus(@RequestParam("available") String availability) {
         return ResponseEntity.ok().body(animalService.findAnimalByAvailabilityStatus(AnimalAvailability.fromValue(availability)));
     }
 
@@ -35,7 +36,7 @@ public class AnimalController {
     }
 
     @GetMapping("/id")
-    public ResponseEntity<Animal> findAnimalByPetId(@RequestParam("animalId") int animalId) {
+    public ResponseEntity<Animal> findAnimalByAnimalId(@RequestParam("animalId") int animalId) {
         return ResponseEntity.ok().body(animalService.findAnimalByAnimalId(animalId));
     }
 

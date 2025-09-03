@@ -1,8 +1,11 @@
 package com.ferallove.services;
 
+import com.ferallove.dto.AnimalDTO;
 import com.ferallove.enums.AnimalAvailability;
 import com.ferallove.models.Animal;
+import com.ferallove.models.Species;
 import com.ferallove.repos.AnimalRepo;
+import com.ferallove.repos.SpeciesRepo;
 import com.ferallove.utils.AnimalAvailabilityConverter;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +15,11 @@ import java.util.ArrayList;
 public class AnimalServiceImpl implements AnimalService {
 
     private final AnimalRepo animalRepo;
+    private final SpeciesRepo speciesRepo;
 
-    public AnimalServiceImpl(AnimalRepo petsRepo){
+    public AnimalServiceImpl(AnimalRepo petsRepo, SpeciesRepo speciesRepo){
         this.animalRepo = petsRepo;
+        this.speciesRepo = speciesRepo;
     }
 
     @Override
@@ -36,8 +41,14 @@ public class AnimalServiceImpl implements AnimalService {
     }
 
     @Override
-    public ArrayList<Animal> findAnimalByAvailabilityStatus(AnimalAvailability availabilityStatus) {
-        return animalRepo.findAnimalByAvailabilityStatus(availabilityStatus);
+    public ArrayList<AnimalDTO> findAnimalByAvailabilityStatus(AnimalAvailability availabilityStatus) {
+        ArrayList<AnimalDTO> animalsDTO = new ArrayList<AnimalDTO>();
+        Species species = speciesRepo.findSpeciesBySpeciesId(1);
+        ArrayList<Animal> animals = animalRepo.findAnimalByAvailabilityStatus(availabilityStatus);
+        for (Animal animal: animals){
+            animalsDTO.add(new AnimalDTO(animal, species));
+        }
+        return animalsDTO;
     }
 
     @Override
